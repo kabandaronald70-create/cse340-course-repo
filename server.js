@@ -37,20 +37,29 @@ app.listen(PORT, () => {
  * Routes
  */
 app.get('/', async (req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
+  res.render('home', {
+    title: 'Home',
+    description: 'Connect with volunteers and discover service opportunities through the CSE 340 Service Network.'
+  });
 });
 
 app.get('/organizations', async (req, res) => {
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title });
+  res.render('organizations', {
+    title: 'Partner Organizations',
+    description: 'Meet the partner organizations working with the CSE 340 Service Network to strengthen communities.'
+  });
 });
 
 app.get('/projects', async (req, res) => {
-    const title = 'Service Projects';
-    res.render('projects', { title });
+  res.render('projects', {
+    title: 'Service Projects',
+    description: 'Explore upcoming service projects, including park cleanups, food drives, and community tutoring.'
+  });
 });
 
 app.get('/categories', (req, res) => {
-    res.render('categories', { title: 'Categories' });
+  res.render('categories', {
+    title: 'Project Categories',
+    description: 'Browse service project categories such as environmental, educational, community, and health initiatives.'
+  });
 });
