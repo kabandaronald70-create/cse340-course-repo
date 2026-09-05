@@ -4,6 +4,7 @@ import path from 'path';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
 import { testConnection } from './src/models/db.js';
+import { getAllCategories } from './src/models/categories.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,9 +79,17 @@ app.get('/projects', async (req, res) => {
     }
 });
 
-app.get('/categories', (req, res) => {
-  res.render('categories', {
-    title: 'Project Categories',
-    description: 'Browse service project categories such as environmental, educational, community, and health initiatives.'
-  });
+app.get('/categories', async (req, res) => {
+    try {
+        const categories = await getAllCategories();
+        console.log('Categories data:', categories);
+        res.render('categories', {
+            title: 'Project Categories',
+            description: 'Browse service project categories such as environmental, educational, community, and health initiatives.',
+            categories: categories
+        });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Server error');
+    }
 });

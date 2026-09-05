@@ -167,3 +167,72 @@ VALUES (
         'Unity Fairgrounds, Unity',
         '2026-08-25'
     );
+--CATEGORIES TABLE
+-- Create category table
+CREATE TABLE IF NOT EXISTS category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+-- Create junction table for many‑to‑many
+CREATE TABLE IF NOT EXISTS project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    FOREIGN KEY (project_id) REFERENCES service_projects(project_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
+);
+-- Insert at least 3 categories
+INSERT INTO category (name)
+VALUES ('Environmental'),
+    ('Community Outreach'),
+    ('Education'),
+    ('Health & Wellness'),
+    ('Infrastructure');
+-- Associate each project with at least one category.
+-- You can write a series of INSERT statements like:
+INSERT INTO project_category (project_id, category_id)
+VALUES (1, 1),
+    (1, 2),
+    -- Park Renovation: Environmental, Community Outreach
+    (2, 5),
+    (2, 2),
+    -- Housing: Infrastructure, Community Outreach
+    (3, 3),
+    (3, 2),
+    -- School Playground: Education, Community Outreach
+    (4, 1),
+    (4, 4),
+    -- Senior Garden: Environmental, Health & Wellness
+    (5, 5),
+    (5, 2),
+    -- Sidewalk Repair: Infrastructure, Community Outreach
+    (6, 1),
+    (6, 3),
+    -- Urban Farm: Environmental, Education
+    (7, 4),
+    (7, 3),
+    -- Cooking Class: Health & Wellness, Education
+    (8, 1),
+    (8, 2),
+    -- Seed Drive: Environmental, Community Outreach
+    (9, 2),
+    (9, 4),
+    -- Farmers Market: Community Outreach, Health & Wellness
+    (10, 3),
+    (10, 1),
+    -- School Garden: Education, Environmental
+    (11, 2),
+    (11, 4),
+    -- Food Drive: Community Outreach, Health & Wellness
+    (12, 4),
+    (12, 2),
+    -- Blood Donation: Health & Wellness, Community Outreach
+    (13, 2),
+    (13, 1),
+    -- Clothing Swap: Community Outreach, Environmental
+    (14, 1),
+    (14, 2),
+    -- Cleanup: Environmental, Community Outreach
+    (15, 4),
+    (15, 2);
+-- Pet Fair: Health & Wellness, Community Outreach

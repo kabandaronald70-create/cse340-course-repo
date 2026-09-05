@@ -1,9 +1,28 @@
-<%- include('partials/header', { title: 'Categories' }) %>
-    <h1>Service Project Categories</h1>
-    <ul class="categories-grid">
-        <li>🌿 Environmental</li>
-        <li>📚 Educational</li>
-        <li>🤝 Community Service</li>
-        <li>❤️ Health and Wellness</li>
-    </ul>
+<%- include('partials/header', { title: title || 'Categories', description: description || '' }) %>
+
+<main>
+    <h1>Project Categories</h1>
+    <p><%= description %></p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div style="padding:1rem;background:#fee;border:1px solid #f99;border-radius:6px;color:#933;margin:1rem 0;">
+            <strong>⚠️ Database Error:</strong> <%= error %>
+        </div>
+    <% } %>
+
+    <% 
+        const cats = (typeof categories !== 'undefined' && Array.isArray(categories)) ? categories : []; 
+    %>
+
+    <% if (cats.length === 0) { %>
+        <p style="color:#666;"><em>No categories available.</em></p>
+    <% } else { %>
+        <ul class="categories-list">
+            <% cats.forEach(cat => { %>
+                <li><%= cat.name %></li>
+            <% }); %>
+        </ul>
+    <% } %>
+</main>
+
 <%- include('partials/footer') %>
