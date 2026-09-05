@@ -1,11 +1,31 @@
-<%- include('partials/header') %>
-    <main>
-        <h1>[ORGANIZATIONS PAGE]</h1>
-        <p>Here are a few of our partner organizations:</p>
-<ul>
-    <li><img src="/images/brightfuture-logo.png" alt="BrightFuture Builders logo"><strong>BrightFuture Builders</strong>: info@brightfuture.org</li>
-    <li><img src="/images/greenharvest-logo.png" alt="GreenHarvest Growers logo"><strong>GreenHarvest Growers</strong>: contact@greenharvest.org</li>
-    <li><img src="/images/unityserve-logo.png" alt="UnityServe Volunteers logo"><strong>UnityServe Volunteers</strong>: hello@unityserve.org</li>
-</ul>
-    </main>
+<%- include('partials/header', { title: title || 'Organizations', description: description || '' }) %>
+
+<main>
+    <h1>Partner Organizations</h1>
+    <p>Here are a few of our partner organizations:</p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div style="padding:1rem;background:#fee;border:1px solid #f99;border-radius:6px;color:#933;margin:1rem 0;">
+            <strong>⚠️ Database Error:</strong> <%= error %>
+        </div>
+    <% } %>
+
+    <% const orgs = (typeof organizations !== 'undefined' && Array.isArray(organizations)) ? organizations : []; %>
+
+    <% if (orgs.length === 0) { %>
+        <p style="color:#666;"><em>No organizations to display.</em></p>
+    <% } else { %>
+        <ul class="organizations-grid">
+            <% orgs.forEach(org => { %>
+                <li>
+                    <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo">
+                    <strong><%= org.name %></strong>
+                    <p><%= org.description %></p>
+                    <a href="mailto:<%= org.contact_email %>"><%= org.contact_email %></a>
+                </li>
+            <% }); %>
+        </ul>
+    <% } %>
+</main>
+
 <%- include('partials/footer') %>

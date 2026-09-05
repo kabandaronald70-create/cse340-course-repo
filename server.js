@@ -1,6 +1,8 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { getAllOrganizations } from './src/models/organizations.js';
+import { testConnection } from './src/models/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,11 +29,15 @@ app.set('view engine', 'ejs');
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://127.0.0.1:${PORT}`);
-  console.log(`Environment: ${NODE_ENV}`);
+app.listen(PORT, async () => {
+  try {
+    await testConnection();
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
 });
-
 
 /**
  * Routes
@@ -44,10 +50,16 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/organizations', async (req, res) => {
-  res.render('organizations', {
-    title: 'Partner Organizations',
-    description: 'Meet the partner organizations working with the CSE 340 Service Network to strengthen communities.'
-  });
+    const title = 'Our Partner Organizations';
+    const description = 'Meet the partner organizations working with the CSE 340 Service Network to strengthen communities.';
+    try {
+        const organizations = await getAllOrganizations();
+        console.log('Organizations from DB:', organizations);
+        res.render('organizations', { title, description, organizations: organizations || [] });
+    } catch (error) {
+        console.error('Error fetching organizations:', error);
+        res.render('organizations', { title, description, organizations: [], error: error.message });
+    }
 });
 
 app.get('/projects', async (req, res) => {
