@@ -1,11 +1,40 @@
-<%- include('partials/header') %>
-    <main>
-        <h1>PROJECTS PAGE</h1>
-        <h2>Upcoming Service Projects</h2>
-<ul>
-    <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-    <li>Food Drive - Help collect and distribute food to those in need.</li>
-    <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
-</ul>
-    </main>
+<%- include('partials/header', { title: title || 'Service Projects', description: description || '' }) %>
+
+<main>
+    <h1>Service Projects</h1>
+    <p><%= description %></p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div style="padding:1rem;background:#fee;border:1px solid #f99;border-radius:6px;color:#933;margin:1rem 0;">
+            <strong>⚠️ Database Error:</strong> <%= error %>
+        </div>
+    <% } %>
+
+    <% 
+        const projs = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : []; 
+    %>
+
+    <% if (projs.length === 0) { %>
+        <p style="color:#666;"><em>No service projects available at this time.</em></p>
+    <% } else { %>
+        <ul class="projects-list">
+            <% projs.forEach(proj => { 
+                // Format the date to a user‑friendly string
+                const dateObj = new Date(proj.project_date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            %>
+                <li>
+                    <strong><%= formattedDate %>:</strong> 
+                    <%= proj.title %> 
+                    (<%= proj.organization_name %>)
+                </li>
+            <% }); %>
+        </ul>
+    <% } %>
+</main>
+
 <%- include('partials/footer') %>

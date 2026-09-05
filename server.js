@@ -2,6 +2,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 import { testConnection } from './src/models/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -63,10 +64,18 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.get('/projects', async (req, res) => {
-  res.render('projects', {
-    title: 'Service Projects',
-    description: 'Explore upcoming service projects, including park cleanups, food drives, and community tutoring.'
-  });
+    try {
+        const projects = await getAllProjects();
+        console.log('Projects data:', projects); // for debugging
+        res.render('projects', {
+            title: 'Service Projects',
+            description: 'Explore upcoming service projects, including park cleanups, food drives, and community tutoring.',
+            projects: projects   // pass the projects array to the view
+        });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 app.get('/categories', (req, res) => {
