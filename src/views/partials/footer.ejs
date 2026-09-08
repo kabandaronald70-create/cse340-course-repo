@@ -1,31 +1,10 @@
-    </main>
-    <footer>
-        <p>
-            &copy; <%= new Date().getFullYear() %> Ronald Kabanda – CSE 340 Service Network
-        </p>
-        <p>
-            Current time: <span id="live-datetime"></span>
+ <footer>
+        <p>&copy; <%= new Date().getFullYear() %> CSE 340 Service Network.
+        <% if (NODE_ENV === 'development') { %>
+            (Development mode)
+        <% } %>
+        
         </p>
     </footer>
-
-    <script>
-        function updateDateTime() {
-            const now = new Date();
-            const formatted = now.toLocaleString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('live-datetime').textContent = formatted;
-        }
-
-        // Update immediately and then every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-    </script>
 </body>
 </html>
