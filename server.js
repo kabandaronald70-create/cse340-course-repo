@@ -100,6 +100,7 @@ app.use((err, req, res, next) => {
     // Prepare data for the template
     const context = {
         title: status === 404 ? 'Page Not Found' : 'Server Error',
+         description: '',
         error: err.message,
         stack: err.stack
     };
