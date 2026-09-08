@@ -1,25 +1,22 @@
-<%- include('partials/header', { title: title || 'Service Projects', description: description || '' }) %>
+<%- include('partials/header', { title: title || 'Upcoming Service Projects', description: description || '' }) %>
 
 <main>
-    <h1>Service Projects</h1>
+    <h1><%= title %></h1>
     <p><%= description %></p>
 
     <% if (typeof error !== 'undefined' && error) { %>
         <div style="padding:1rem;background:#fee;border:1px solid #f99;border-radius:6px;color:#933;margin:1rem 0;">
-            <strong>⚠️ Database Error:</strong> <%= error %>
+            <strong>⚠️ Error:</strong> <%= error %>
         </div>
     <% } %>
 
-    <% 
-        const projs = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : []; 
-    %>
+    <% const projs = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : []; %>
 
     <% if (projs.length === 0) { %>
-        <p style="color:#666;"><em>No service projects available at this time.</em></p>
+        <p style="color:#666;"><em>No upcoming service projects at this time.</em></p>
     <% } else { %>
-        <ul class="projects-list">
+        <ul class="organizations-grid"> <!-- reuse the same grid style -->
             <% projs.forEach(proj => { 
-                // Format the date to a user‑friendly string
                 const dateObj = new Date(proj.project_date);
                 const formattedDate = dateObj.toLocaleDateString('en-US', { 
                     year: 'numeric', 
@@ -28,9 +25,19 @@
                 });
             %>
                 <li>
-                    <strong><%= formattedDate %>:</strong> 
-                    <%= proj.title %> 
-                    (<%= proj.organization_name %>)
+                    <!-- Project title is a link to its details page -->
+                    <a href="/project/<%= proj.project_id %>">
+                        <strong><%= proj.title %></strong>
+                    </a>
+                    <p><strong>Date:</strong> <%= formattedDate %></p>
+                    <p><strong>Organization:</strong> 
+                        <!-- Organization name is a link to its details page -->
+                        <a href="/organization/<%= proj.organization_id %>">
+                            <%= proj.organization_name %>
+                        </a>
+                    </p>
+                    <p><strong>Location:</strong> <%= proj.location %></p>
+                    <p><%= proj.description %></p>
                 </li>
             <% }); %>
         </ul>
