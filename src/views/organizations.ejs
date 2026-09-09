@@ -19,7 +19,9 @@
             <% orgs.forEach(org => { %>
                 <li>
                     <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo">
-                    <strong><%= org.name %></strong>
+                    <a href="/organization/<%= org.organization_id %>">
+                        <strong><%= org.name %></strong>
+                    </a>
                     <p><%= org.description %></p>
                     <a href="mailto:<%= org.contact_email %>"><%= org.contact_email %></a>
                 </li>

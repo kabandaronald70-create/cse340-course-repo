@@ -20,12 +20,12 @@ const showOrganizationDetailsPage = async (req, res, next) => {
 
     const projects = await getProjectsByOrganizationId(organizationId);
     const title = organization.name;
-    const description = organization.description;   // 👈 added to fix header error
+    const description = organization.description;   
 
     res.render('organization', { 
         title, 
         description, 
-        organization,   // 👈 uses the original variable name
+        organization,   
         projects 
     });
 };

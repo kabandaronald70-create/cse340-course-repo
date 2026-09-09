@@ -5,6 +5,29 @@
     <p><strong>Description:</strong> <%= organization.description %></p>
     <p><strong>Contact Email:</strong> <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
     
+    <h3>Service Projects</h3>
+    <% if (projects.length === 0) { %>
+        <p style="color:#666;"><em>No service projects found for this organization.</em></p>
+    <% } else { %>
+        <ul>
+            <% projects.forEach(project => { 
+                const dateObj = new Date(project.project_date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            %>
+                <li>
+                    <a href="/project/<%= project.project_id %>"><strong><%= project.title %></strong></a>
+                    <p><strong>Date:</strong> <%= formattedDate %></p>
+                    <p><strong>Location:</strong> <%= project.location %></p>
+                    <p><%= project.description %></p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+    
     <p><a href="/projects">← Back to upcoming projects</a></p>
 </main>
 <%- include('partials/footer') %>
