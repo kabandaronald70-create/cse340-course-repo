@@ -10,16 +10,16 @@
         </div>
     <% } %>
 
-    <% 
-        const cats = (typeof categories !== 'undefined' && Array.isArray(categories)) ? categories : []; 
-    %>
+    <% const cats = (typeof categories !== 'undefined' && Array.isArray(categories)) ? categories : []; %>
 
     <% if (cats.length === 0) { %>
         <p style="color:#666;"><em>No categories available.</em></p>
     <% } else { %>
         <ul class="categories-list">
             <% cats.forEach(cat => { %>
-                <li><%= cat.name %></li>
+                <li>
+                    <a href="/category/<%= cat.category_id %>"><%= cat.name %></a>
+                </li>
             <% }); %>
         </ul>
     <% } %>

@@ -65,4 +65,19 @@ const getProjectDetails = async (id) => {
     return result.rows[0]; // return the first row (or undefined if not found)
 };
 
-export { getAllProjects, getUpcomingProjects, getProjectDetails };
+/**
+ * Get projects associated with a specific organization
+ */
+const getProjectsByOrganizationId = async (organizationId) => {
+    const query = `
+        SELECT project_id, title, description, location, project_date
+        FROM service_projects
+        WHERE organization_id = $1
+        ORDER BY project_date ASC;
+    `;
+    const result = await db.query(query, [organizationId]);
+    return result.rows;
+};
+
+// Export – add the new function to the list
+export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId };

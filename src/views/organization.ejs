@@ -1,12 +1,10 @@
-<%- include('partials/header', { title: title || 'Organization Details', description: '' }) %>
-
+<%- include('partials/header', { title: title || 'Organization Details', description: description || '' }) %>
 <main>
     <h1><%= organization.name %></h1>
-    <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" style="max-width:200px;">
+    <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
     <p><strong>Description:</strong> <%= organization.description %></p>
     <p><strong>Contact Email:</strong> <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
-
+    
     <p><a href="/projects">← Back to upcoming projects</a></p>
 </main>
-
 <%- include('partials/footer') %>

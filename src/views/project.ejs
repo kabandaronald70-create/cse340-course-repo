@@ -1,4 +1,4 @@
-<%- include('partials/header', { title: title || 'Project Details', description: '' }) %>
+<%- include('partials/header', { title: title || 'Project Details', description: description || '' }) %>
 
 <main>
     <h1><%= project.title %></h1>
@@ -17,6 +17,15 @@
             <%= project.organization_name %>
         </a>
     </p>
+
+    <%# Category tags section %>
+    <% if (categories && categories.length > 0) { %>
+        <p><strong>Categories:</strong>
+            <% categories.forEach((cat, index) => { %>
+                <a href="/category/<%= cat.category_id %>"><%= cat.name %></a><% if (index < categories.length - 1) { %>, <% } %>
+            <% }); %>
+        </p>
+    <% } %>
 
     <p><a href="/projects">← Back to upcoming projects</a></p>
 </main>

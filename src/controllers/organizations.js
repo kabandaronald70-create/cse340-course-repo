@@ -1,5 +1,5 @@
-// src/controllers/organizations.js
 import { getAllOrganizations, getOrganizationById } from '../models/organizations.js';
+import { getProjectsByOrganizationId } from '../models/projects.js';
 
 const showOrganizationsPage = async (req, res) => {
     const organizations = await getAllOrganizations();
@@ -8,16 +8,26 @@ const showOrganizationsPage = async (req, res) => {
     res.render('organizations', { title, description, organizations });
 };
 
-const showOrganizationDetailsPage = async (req, res) => {
-    const orgId = req.params.id;
-    const organization = await getOrganizationById(orgId);
+const showOrganizationDetailsPage = async (req, res, next) => {
+    const organizationId = req.params.id;
+    const organization = await getOrganizationById(organizationId);
+
     if (!organization) {
         const err = new Error('Organization not found');
         err.status = 404;
-        return req.next(err);
+        return next(err);
     }
+
+    const projects = await getProjectsByOrganizationId(organizationId);
     const title = organization.name;
-    res.render('organization', { title, organization });
+    const description = organization.description;   // 👈 added to fix header error
+
+    res.render('organization', { 
+        title, 
+        description, 
+        organization,   // 👈 uses the original variable name
+        projects 
+    });
 };
 
 export { showOrganizationsPage, showOrganizationDetailsPage };
