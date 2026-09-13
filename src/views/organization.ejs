@@ -3,19 +3,22 @@
     <h1><%= organization.name %></h1>
     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
     <p><strong>Description:</strong> <%= organization.description %></p>
+
     <p><strong>Contact Email:</strong> <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
-    
+
+    <p><a href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a></p>
+
     <h3>Service Projects</h3>
     <% if (projects.length === 0) { %>
         <p style="color:#666;"><em>No service projects found for this organization.</em></p>
     <% } else { %>
         <ul>
-            <% projects.forEach(project => { 
+            <% projects.forEach(project => {
                 const dateObj = new Date(project.project_date);
-                const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                const formattedDate = dateObj.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                 });
             %>
                 <li>
@@ -27,7 +30,7 @@
             <% }) %>
         </ul>
     <% } %>
-    
+
     <p><a href="/projects">← Back to upcoming projects</a></p>
 </main>
 <%- include('partials/footer') %>

@@ -79,5 +79,71 @@ const getProjectsByOrganizationId = async (organizationId) => {
     return result.rows;
 };
 
+/**
+ * Creates a new service project in the database.
+ * @param {string} title
+ * @param {string} description
+ * @param {string} location
+ * @param {string} date
+ * @param {number} organizationId
+ * @returns {string} The id of the newly created project.
+ */
+const createProject = async (title, description, location, date, organizationId) => {
+    const query = `
+        INSERT INTO service_projects (title, description, location, project_date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+
+    const queryParams = [title, description, location, date, organizationId];
+    const result = await db.query(query, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new project with ID:', result.rows[0].project_id);
+    }
+
+    return result.rows[0].project_id;
+};
+
+/**
+ * Updates an existing service project in the database.
+ * @param {number} projectId
+ * @param {string} title
+ * @param {string} description
+ * @param {string} location
+ * @param {string} date
+ * @param {number} organizationId
+ * @returns {string} The id of the updated project.
+ */
+const updateProject = async (projectId, title, description, location, date, organizationId) => {
+    const query = `
+        UPDATE service_projects
+        SET title = $1,
+            description = $2,
+            location = $3,
+            project_date = $4,
+            organization_id = $5
+        WHERE project_id = $6
+        RETURNING project_id;
+    `;
+
+    const queryParams = [title, description, location, date, organizationId, projectId];
+    const result = await db.query(query, queryParams);
+
+    if (result.rows.length === 0) {
+        throw new Error('Project not found');
+    }
+
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Updated project with ID:', result.rows[0].project_id);
+    }
+
+    return result.rows[0].project_id;
+};
+
 // Export – add the new function to the list
-export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId };
+export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId, createProject, updateProject };

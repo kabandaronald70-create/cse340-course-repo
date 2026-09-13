@@ -2,6 +2,8 @@
 
 <main>
     <h1>Category: <%= category.name %></h1>
+
+    <p><a href="/edit-category/<%= category.category_id %>">Edit Category</a></p>
     <p><%= description %></p>
 
     <% if (typeof error !== 'undefined' && error) { %>
