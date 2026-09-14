@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 # node
 node_modules/
 .env
+
+# database backup
+database-backup/
