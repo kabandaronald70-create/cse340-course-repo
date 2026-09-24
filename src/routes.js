@@ -8,7 +8,8 @@ import {
     showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm,showNewCategoryForm, processNewCategoryForm, showEditCategoryForm,      processEditCategoryForm,categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
 import {
-    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout
+    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout,  showDashboard,
+    requireLogin
 } from './controllers/users.js';
 import { requireAdmin } from './middleware/auth.js';
 import { showAdminDashboard } from './controllers/admin.js';
@@ -33,6 +34,8 @@ router.get('/login', showLoginForm);
 router.post('/login', loginValidation, processLogin);
 router.get('/logout', processLogout);
 router.get('/admin', requireAdmin, showAdminDashboard);
+
+router.get('/dashboard', requireLogin, showDashboard);
 
 
 // Route to handle the submission of the edit organization form

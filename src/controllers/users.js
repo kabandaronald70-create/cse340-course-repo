@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 import {
     createUser,
     findUserByEmail,
-    verifyPassword
+    authenticateUser
 } from '../models/users.js';
 
 /* ---------- Validation rules ---------- */
@@ -73,44 +73,46 @@ async function processLogin(req, res, next) {
         }
 
         const { email, password } = req.body;
-        const user = await findUserByEmail(email);
 
-        // Same error message whether email is wrong OR password is wrong (don't leak which)
+        // Single call to authenticateUser — does lookup + verify + strip hash
+        const user = await authenticateUser(email, password);
+
         if (!user) {
             req.flash('error', 'Invalid email or password.');
             return res.redirect('/login');
         }
 
-        const valid = await verifyPassword(password, user.password_hash);
-        if (!valid) {
-            req.flash('error', 'Invalid email or password.');
-            return res.redirect('/login');
-        }
+        req.session.user = user;
 
-        // Save minimal user info in session (never the password hash!)
-        req.session.user = {
-            user_id: user.user_id,
-            name: user.name,
-            email: user.email,
-            role_id: user.role_id,
-            role_name: user.role_name
-        };
+        console.log(`User logged in: ${user.email} (role: ${user.role_name})`);
 
         req.flash('success', `Welcome back, ${user.name}!`);
-        res.redirect('/');
+        res.redirect('/dashboard');  
     } catch (err) {
         next(err);
     }
 }
 
 /* ---------- GET /logout ---------- */
-function processLogout(req, res) {
-    req.session.destroy(err => {
-        if (err) console.error('Session destroy error:', err);
-        res.redirect('/');
+function processLogout(req, res, next) {
+    req.session.regenerate(err => {
+        if (err) return next(err);
+
+        req.flash('success', 'You have been logged out.');
+        res.redirect('/login');
     });
 }
 
+/* ---------- GET /dashboard ---------- */
+function showDashboard(req, res) {
+    const { name, email } = req.session.user;
+    res.render('dashboard', {
+        title: 'Dashboard',
+        description: 'Your personal CSE 340 Service Network dashboard.',
+        name,
+        email
+    });
+}
 export {
     registerValidation,
     loginValidation,
@@ -118,5 +120,7 @@ export {
     processRegister,
     showLoginForm,
     processLogin,
-    processLogout
+    processLogout,
+    showDashboard
 };
+export { requireLogin } from '../middleware/auth.js';

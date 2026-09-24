@@ -75,4 +75,29 @@ async function verifyPassword(plaintext, hash) {
     return bcrypt.compare(plaintext, hash);
 }
 
-export { createUser, findUserByEmail, findUserById, verifyPassword };
+/**
+ * Authenticate a user by email + password.
+ * Combines findUserByEmail and verifyPassword, and strips the password_hash
+ * from the returned object so it never leaks into the session or views.
+ * 
+ * @returns {object|null} the safe user object, or null on failure
+ */
+async function authenticateUser(email, password) {
+    const user = await findUserByEmail(email);
+    if (!user) return null;
+
+    const valid = await verifyPassword(password, user.password_hash);
+    if (!valid) return null;
+
+    // Strip the password_hash before returning
+    const { password_hash, ...safeUser } = user;
+    return safeUser;
+}
+
+export {
+    createUser,
+    findUserByEmail,
+    findUserById,
+    verifyPassword,
+    authenticateUser
+};
