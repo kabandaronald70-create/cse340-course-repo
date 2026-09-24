@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+
+<h1>Admin Dashboard</h1>
+<p>Only administrators can see this page.</p>
+
+<h2>Quick stats</h2>
+<ul>
+    <li>Logged in as: <%= user.name %> (<%= user.email %>)</li>
+    <li>Role: <%= user.role_name %></li>
+</ul>
+
+<%- include('../partials/footer') %>

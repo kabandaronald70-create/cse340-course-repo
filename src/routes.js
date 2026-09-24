@@ -7,8 +7,14 @@ import { showProjectsPage, showProjectDetailsPage,  showNewProjectForm, processN
 import {
     showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm,showNewCategoryForm, processNewCategoryForm, showEditCategoryForm,      processEditCategoryForm,categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
+import {
+    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout
+} from './controllers/users.js';
+import { requireAdmin } from './middleware/auth.js';
+import { showAdminDashboard } from './controllers/admin.js';
 
 const router = express.Router();
+
 
 // Main pages
 router.get('/', showHomePage);
@@ -21,6 +27,12 @@ router.get('/new-project', showNewProjectForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
 router.get('/new-category', showNewCategoryForm);
 router.post('/new-category', categoryValidation, processNewCategoryForm);
+router.get('/register', showRegisterForm);
+router.post('/register', registerValidation, processRegister);
+router.get('/login', showLoginForm);
+router.post('/login', loginValidation, processLogin);
+router.get('/logout', processLogout);
+router.get('/admin', requireAdmin, showAdminDashboard);
 
 
 // Route to handle the submission of the edit organization form

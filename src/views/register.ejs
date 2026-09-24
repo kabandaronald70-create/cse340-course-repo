@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+
+<h1>Register</h1>
+
+<% if (typeof messages !== 'undefined' && messages.error) { %>
+    <ul class="flash-error">
+        <% messages.error.forEach(msg => { %>
+            <li><%= msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<form method="POST" action="/register">
+    <label>Name
+        <input type="text" name="name" required minlength="2" maxlength="100">
+    </label>
+    <label>Email
+        <input type="email" name="email" required>
+    </label>
+    <label>Password (min 8 characters)
+        <input type="password" name="password" required minlength="8">
+    </label>
+    <button type="submit">Register</button>
+</form>
+
+<p>Already have an account? <a href="/login">Log in</a></p>
+
+<%- include('partials/footer') %>

@@ -6,6 +6,7 @@ import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 import session from 'express-session';
 import flash from './src/middleware/flash.js';
+import { setCurrentUser } from './src/middleware/auth.js';
 
 // Define the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
 }));
 
@@ -55,6 +56,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(setCurrentUser);
 // Use the imported router to handle routes
 app.use(router);
 

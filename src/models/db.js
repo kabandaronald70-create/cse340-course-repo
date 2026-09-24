@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import 'dotenv/config';
 
 /**
  * Connection pool for PostgreSQL database.
@@ -11,14 +12,17 @@ import { Pool } from 'pg';
  * The connection string format is:
  * postgresql://username:password@host:port/database
  */
+
+const dbUrl = new URL(process.env.DB_URL);
+
 const pool = new Pool({
-    connectionString: process.env.DB_URL,
-
-    ssl: {
-        rejectUnauthorized: false
-    }
+  user: dbUrl.username,
+  password: dbUrl.password,
+  host: dbUrl.hostname,
+  port: parseInt(dbUrl.port, 10) || 5432,
+  database: dbUrl.pathname.slice(1), 
+  ssl: { rejectUnauthorized: false }
 });
-
 /**
  * Common SSL Issue:
  *

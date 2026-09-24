@@ -314,3 +314,8 @@ footer {
     background-color: #d1ecf1;
     border-color: #bee5eb;
 }
+
+.nav-user {
+    font-style: italic;
+    color: #555;
+}
