@@ -10,6 +10,7 @@ import {
     registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard,requireLogin, showUsersPage } from './controllers/users.js';
 import { requireAdmin, requireRole } from './middleware/auth.js';
 import { showAdminDashboard } from './controllers/admin.js';
+import { processVolunteerForProject, processRemoveVolunteer } from './controllers/volunteers.js';
 
 const router = express.Router();
 
@@ -47,6 +48,9 @@ router.get('/dashboard', requireLogin, showDashboard);
 router.get('/organization/:id', showOrganizationDetailsPage);
 router.get('/project/:id', showProjectDetailsPage);
 router.get('/category/:id', showCategoryDetailsPage);
+router.post('/volunteer/:projectId', requireLogin, processVolunteerForProject);
+router.post('/unvolunteer/:projectId', requireLogin, processRemoveVolunteer);
+
 
 // Admin-only: edit organization
 router.get('/edit-organization/:id', requireRole('admin'), showEditOrganizationForm);

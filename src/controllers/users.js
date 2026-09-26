@@ -1,9 +1,7 @@
 import { body, validationResult } from 'express-validator';
-import {
-    createUser,
-    findUserByEmail,
-    authenticateUser, getAllUsers
+import { createUser, findUserByEmail, authenticateUser, getAllUsers
 } from '../models/users.js';
+import { getVolunteeredProjects } from '../models/volunteers.js';
 
 /* ---------- Validation rules ---------- */
 const registerValidation = [
@@ -104,14 +102,21 @@ function processLogout(req, res, next) {
 }
 
 /* ---------- GET /dashboard ---------- */
-function showDashboard(req, res) {
-    const { name, email } = req.session.user;
-    res.render('dashboard', {
-        title: 'Dashboard',
-        description: 'Your personal CSE 340 Service Network dashboard.',
-        name,
-        email
-    });
+async function showDashboard(req, res, next) {
+    try {
+        const { name, email, user_id } = req.session.user;
+        const volunteeredProjects = await getVolunteeredProjects(user_id);
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            description: 'Your personal CSE 340 Service Network dashboard.',
+            name,
+            email,
+            volunteeredProjects
+        });
+    } catch (err) {
+        next(err);
+    }
 }
 
 /* ---------- GET /users (admin only) ---------- */
@@ -128,7 +133,6 @@ async function showUsersPage(req, res, next) {
     }
 }
 export {
-    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard, showUsersPage 
+    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard, showUsersPage
 };
-export { requireLogin } from '../middleware/auth.js';
-export { requireRole } from '../middleware/auth.js';
+export { requireLogin, requireRole } from '../middleware/auth.js';

@@ -1,13 +1,44 @@
 <%- include('partials/header') %>
 
-<h1>Dashboard</h1>
+<main>
+    <h1>Dashboard</h1>
 
-<p>Welcome back, <strong><%= name %></strong>!</p>
+    <p>Welcome back, <strong><%= name %></strong>!</p>
 
-<% if (user && user.role_name === 'admin') { %>
-    <p><a href="/users" class="btn">View All Users</a></p>
-<% } %>
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/users" class="btn">View All Users</a></p>
+    <% } %>
 
-<p>Your email: <strong><%= email %></strong></p>
+    <p>Your email: <strong><%= email %></strong></p>
+
+    <hr>
+
+    <h2>My Volunteer Signups</h2>
+
+    <% const vols = (typeof volunteeredProjects !== 'undefined' && Array.isArray(volunteeredProjects)) ? volunteeredProjects : []; %>
+
+    <% if (vols.length === 0) { %>
+        <p><em>You haven't signed up to volunteer for any projects yet.</em></p>
+        <p><a href="/projects">Browse projects →</a></p>
+    <% } else { %>
+        <ul class="volunteer-list">
+            <% vols.forEach(p => { %>
+                <li>
+                    <a href="/project/<%= p.project_id %>"><strong><%= p.title %></strong></a>
+                    — <%= p.organization_name %>
+                    <br>
+                    <small>Signed up: <%= new Date(p.volunteered_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }) %></small>
+                    <form method="POST" action="/unvolunteer/<%= p.project_id %>" style="display:inline;">
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } %>
+</main>
 
 <%- include('partials/footer') %>
