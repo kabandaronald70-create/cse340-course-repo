@@ -1,4 +1,14 @@
 {
     "workbench.localHistory.enabled": false,
-    "checkpoints.addCheckpointOnSave": false
+    "checkpoints.addCheckpointOnSave": false,
+    "[sql]": {
+        "editor.defaultFormatter": null,
+        "editor.quickSuggestions": {
+            "other": false,
+            "comments": false,
+            "strings": false
+        }
+    },
+    "sqltools.autoDetect": false,
+    "sqltools.linter.enabled": false
 }
