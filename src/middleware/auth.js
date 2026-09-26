@@ -36,4 +36,30 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-export { setCurrentUser, requireLogin, requireAdmin };
+/**
+ * Middleware factory — returns a middleware function that requires
+ * the logged-in user to have a specific role.
+ * 
+ * @param {string} role - The role name required (e.g. 'admin', 'user')
+ * @returns {Function} Express middleware function
+ */
+function requireRole(role) {
+    return (req, res, next) => {
+        // Check if user is logged in first
+        if (!req.session || !req.session.user) {
+            req.flash('error', 'You must be logged in to access this page.');
+            return res.redirect('/login');
+        }
+
+        // Check if the user's role matches
+        if (req.session.user.role_name !== role) {
+            req.flash('error', 'You do not have permission to access this page.');
+            return res.redirect('/');
+        }
+
+        // User has the required role — continue
+        next();
+    };
+}
+
+export { setCurrentUser, requireLogin, requireAdmin, requireRole };

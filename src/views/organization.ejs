@@ -6,7 +6,10 @@
 
     <p><strong>Contact Email:</strong> <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
 
-    <p><a href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a></p>
+    
+     <% if (user && user.role_name === 'admin') { %>
+   <p><a href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a></p>
+<% } %>
 
     <h3>Service Projects</h3>
     <% if (projects.length === 0) { %>

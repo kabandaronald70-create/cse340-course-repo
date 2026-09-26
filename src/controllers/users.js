@@ -124,3 +124,4 @@ export {
     showDashboard
 };
 export { requireLogin } from '../middleware/auth.js';
+export { requireRole } from '../middleware/auth.js';
