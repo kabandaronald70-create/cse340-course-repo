@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 import {
     createUser,
     findUserByEmail,
-    authenticateUser
+    authenticateUser, getAllUsers
 } from '../models/users.js';
 
 /* ---------- Validation rules ---------- */
@@ -113,15 +113,22 @@ function showDashboard(req, res) {
         email
     });
 }
+
+/* ---------- GET /users (admin only) ---------- */
+async function showUsersPage(req, res, next) {
+    try {
+        const users = await getAllUsers();
+        res.render('users', {
+            title: 'All Users',
+            description: 'Registered users of the CSE 340 Service Network.',
+            users
+        });
+    } catch (err) {
+        next(err);
+    }
+}
 export {
-    registerValidation,
-    loginValidation,
-    showRegisterForm,
-    processRegister,
-    showLoginForm,
-    processLogin,
-    processLogout,
-    showDashboard
+    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard, showUsersPage 
 };
 export { requireLogin } from '../middleware/auth.js';
 export { requireRole } from '../middleware/auth.js';

@@ -41,23 +41,21 @@ function requireAdmin(req, res, next) {
  * the logged-in user to have a specific role.
  * 
  * @param {string} role - The role name required (e.g. 'admin', 'user')
+ * @param {string} redirectTo - Where to send non-authorized users (default: '/')
  * @returns {Function} Express middleware function
  */
-function requireRole(role) {
+function requireRole(role, redirectTo = '/') {
     return (req, res, next) => {
-        // Check if user is logged in first
         if (!req.session || !req.session.user) {
             req.flash('error', 'You must be logged in to access this page.');
             return res.redirect('/login');
         }
 
-        // Check if the user's role matches
         if (req.session.user.role_name !== role) {
             req.flash('error', 'You do not have permission to access this page.');
-            return res.redirect('/');
+            return res.redirect(redirectTo);
         }
 
-        // User has the required role — continue
         next();
     };
 }

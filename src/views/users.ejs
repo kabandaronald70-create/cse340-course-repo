@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: title || 'All Users', description: description || '' }) %>
+
+<main>
+    <h1>All Users</h1>
+    <p>Registered users of the CSE 340 Service Network.</p>
+
+    <% const list = (typeof users !== 'undefined' && Array.isArray(users)) ? users : []; %>
+
+    <% if (list.length === 0) { %>
+        <p style="color:#666;"><em>No users registered yet.</em></p>
+    <% } else { %>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% list.forEach(u => { %>
+                    <tr>
+                        <td><%= u.name %></td>
+                        <td><%= u.email %></td>
+                        <td><%= u.role_name %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+
+    <p><a href="/dashboard">&larr; Back to Dashboard</a></p>
+</main>
+
+<%- include('partials/footer') %>

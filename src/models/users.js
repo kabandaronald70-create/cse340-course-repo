@@ -94,10 +94,21 @@ async function authenticateUser(email, password) {
     return safeUser;
 }
 
+/**
+ * Get all users with their role names.
+ * Returns user_id, name, email, role_name — no password hashes.
+ * Ordered by user_id for consistent display.
+ */
+async function getAllUsers() {
+    const result = await db.query(
+        `SELECT u.user_id, u.name, u.email, r.role_name
+         FROM users u
+         JOIN roles r ON u.role_id = r.role_id
+         ORDER BY u.user_id`
+    );
+    return result.rows;
+}
+
 export {
-    createUser,
-    findUserByEmail,
-    findUserById,
-    verifyPassword,
-    authenticateUser
+    createUser, findUserByEmail, findUserById, verifyPassword, authenticateUser, getAllUsers
 };

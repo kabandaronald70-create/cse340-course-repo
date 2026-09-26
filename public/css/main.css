@@ -319,3 +319,23 @@ footer {
     font-style: italic;
     color: #555;
 }
+
+/* ----- Users table styles ----- */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+.users-table th,
+.users-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+}
+.users-table th {
+    background: #f4f4f4;
+    font-weight: 600;
+}
+.users-table tr:nth-child(even) {
+    background: #fafafa;
+}

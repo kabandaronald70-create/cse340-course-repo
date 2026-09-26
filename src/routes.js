@@ -7,9 +7,7 @@ import {
     showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
 import {
-    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard,
-    requireLogin
-} from './controllers/users.js';
+    registerValidation, loginValidation, showRegisterForm, processRegister, showLoginForm, processLogin, processLogout, showDashboard,requireLogin, showUsersPage } from './controllers/users.js';
 import { requireAdmin, requireRole } from './middleware/auth.js';
 import { showAdminDashboard } from './controllers/admin.js';
 
@@ -39,6 +37,8 @@ router.get('/logout', processLogout);
 
 // Admin dashboard
 router.get('/admin', requireAdmin, showAdminDashboard);
+// Admin-only: list all users. Non-admins redirect to /dashboard.
+router.get('/users', requireRole('admin', '/dashboard'), showUsersPage);
 
 // User dashboard
 router.get('/dashboard', requireLogin, showDashboard);
